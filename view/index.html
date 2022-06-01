@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html class=''>
+
+<head>
+
+  <style class="cp-pen-styles">
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Nunito', sans-serif;
+    }
+
+    html,
+    body {
+      background: -webkit-linear-gradient(330deg, #000, #f0a6ca);
+      background: linear-gradient(120deg, #000, #f0a6ca);
+      overflow: hidden;
+    }
+
+    .container {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+      flex-direction: column;
+      height: 106vh;
+      width: 100vw;
+    }
+
+    .container h1 {
+      margin: 0.5em auto;
+      color: #FFF;
+      text-align: center;
+    }
+
+    .chatbox {
+      background: rgba(255, 255, 255, 0.05);
+      width: 600px;
+      height: 75%;
+      border-radius: 0.2em;
+      position: relative;
+      box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .chatbox__messages:nth-of-type(odd) .chatbox__messages__user-message--ind-message {
+      float: right;
+    }
+
+    .chatbox__messages:nth-of-type(odd) .chatbox__messages__user-message--ind-message:after {
+      content: '';
+      position: absolute;
+      margin: -1.5em -17.06em;
+      width: 0;
+      height: 0;
+      border-top: 10px solid transparent;
+      border-bottom: 10px solid transparent;
+      border-right: 10px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .chatbox__messages:nth-of-type(even) .chatbox__messages__user-message--ind-message {
+      float: left;
+    }
+
+    .chatbox__messages:nth-of-type(even) .chatbox__messages__user-message--ind-message:after {
+      content: '';
+      position: absolute;
+      margin: -1.5em 1.87em;
+      width: 0;
+      height: 0;
+      border-top: 10px solid transparent;
+      border-bottom: 10px solid transparent;
+      border-left: 10px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .chatbox__messages__user-message {
+      width: 450px;
+    }
+
+    .chatbox__messages__user-message--ind-message {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 1em 0;
+      height: auto;
+      width: 65%;
+      border-radius: 5px;
+      margin: 1em 0.5em;
+      overflow: auto;
+    }
+
+    .chatbox__messages__user-message--ind-message>p.name {
+      color: #FFF;
+      font-size: 1em;
+    }
+
+    .chatbox__messages__user-message--ind-message>p.message {
+      color: #FFF;
+      font-size: 0.7em;
+      margin: 0 2.8em;
+    }
+
+    .chatbox__user-list {
+      background: rgba(255, 255, 255, 0.1);
+      width: 25%;
+      height: 100%;
+      float: right;
+      border-top-right-radius: 0.2em;
+      border-bottom-right-radius: 0.2em;
+    }
+
+    .chatbox__user-list h1 {
+      background: rgba(255, 255, 255, 0.05);
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 0.9em;
+      padding: 1em;
+      margin: 0;
+      font-weight: 300;
+      text-align: center;
+    }
+
+    .chatbox__user,
+    .chatbox__user--active,
+    .chatbox__user--busy,
+    .chatbox__user--away {
+      width: 0.5em;
+      height: 0.5em;
+      border-radius: 100%;
+      margin: 1em 0.7em;
+    }
+
+    .chatbox__user--active {
+      background: rgba(23, 190, 187, 0.8);
+    }
+
+    .chatbox__user--busy {
+      background: rgba(252, 100, 113, 0.8);
+    }
+
+    .chatbox__user--away {
+      background: rgba(255, 253, 130, 0.8);
+    }
+
+    .chatbox p {
+      float: left;
+      text-align: left;
+      margin: -0.25em 2em;
+      font-size: 0.7em;
+      font-weight: 300;
+      color: #FFF;
+      width: 200px;
+    }
+
+    .chatbox form {
+      background: #222;
+    }
+
+    .chatbox form input {
+      background: rgba(255, 255, 255, 0.1);
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      border: none;
+      width: 75%;
+      padding: 1.2em;
+      outline: none;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 300;
+    }
+
+    ::-webkit-input-placeholder {
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    :-moz-placeholder {
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    ::-moz-placeholder {
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    :-ms-input-placeholder {
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .chatbox form button {
+      background: rgba(0, 0, 0, 0.3);
+      position: absolute;
+      bottom: 0;
+      left: 75%;
+      border: none;
+      width: 25%;
+      padding: 1.2em;
+      outline: none;
+      color: rgba(255, 255, 0, 0.9);
+      font-weight: 300;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class='container' ng-cloak ng-app="chatApp">
+    <h1>넥슨 김승현 채팅방</h1>
+    <div id="color" style="display: none">{{user}}</div>
+    <h2>아래는 당신의 아이디 입니다.</h2>
+    <h2 id="yourcolor">{{user}}</h2>
+    <div class='chatbox' ng-controller="MessageCtrl as chatMessage">
+      <div class='chatbox__user-list'>
+        <h1>Friends Online</h1>
+
+<!-- 색깔은 랜덤으로 지정되게 하자. 아니면 메시 -->
+
+        <!-- <div class='chatbox__user--busy'>
+          <p>김승현</p>
+        </div>
+        <div class='chatbox__user--active'>
+          <p>Amy Angular</p>
+        </div>
+        <div class='chatbox__user--active'>
+          <p>Jack Uniden</p>
+        </div>
+        <div class='chatbox__user--away'>
+          <p>Ben Marcus</p>
+        </div> -->
+      </div>
+
+      <div class="chatbox__messages">
+        <!-- <div class="chatbox__messages__user-message">
+          <div class="chatbox__messages__user-message--ind-message">
+            <p class="name">하비</p>
+            <br />
+            <p class="message">진짜 개잘만들었다 ㅋㅋ</p>
+          </div>
+        </div>
+
+        <div class="chatbox__messages__user-message">
+          <div class="chatbox__messages__user-message--ind-message">
+            <p class="name">세컨드</p>
+            <br />
+            <p class="message">우우우</p>
+          </div> 
+        </div>-->
+
+      <form id="chat-form" method="post">
+        <input type="text" id="chat" placeholder="Type Message">
+        <button type="submit">Send</button>
+      </form>
+    </div>
+</body>
+</html>
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+
+  const color = document.querySelector('#color').innerHTML
+  document.querySelector('#yourcolor').style.color = color
+
+  RendChatBox('SYSTEM', `${color}님이 접속하였습니다.`)
+  RendUserBox(color)
+  
+  const socket = io.connect('http://localhost:6006', {
+    path: '/socket.io',
+  })
+
+  socket.on('join', function(data) {
+    const m = `${data.user}님이 접속하였습니다.`
+    RendChatBox('SYSTEM', m)
+    RendUserBox(data.user)
+  })
+
+  // chat받았을 때
+  socket.on('chat', function(data){
+    //console.log("cahhta")
+    RendChatBox(data.user, data.message)
+  })
+
+  // socket.on('userUpdate', function(data){
+  //     console.log(Object.keys(data.users).length)
+  //     //console.log(data.users)
+  //     console.log()
+  // })
+
+  function RendChatBox(user,text){
+    const div = document.createElement('div')
+    div.classList.add('chatbox__messages__user-message')
+
+    const chat = document.createElement('div')
+    chat.classList.add('chatbox__messages__user-message--ind-message')
+    
+    const name = document.createElement('p')
+    name.classList.add('name')
+    name.textContent = user
+    name.style.color = user
+
+    const message = document.createElement('p')
+    message.classList.add('message')
+    message.textContent = text
+
+    chat.appendChild(name)
+    chat.appendChild(document.createElement("BR"))
+    chat.appendChild(message)
+    div.appendChild(chat)
+
+    const chatbox = document.querySelector('.chatbox__messages')
+    if(chatbox.childElementCount >= 7 ){
+      chatbox.removeChild(chatbox.children[1])
+    }
+    chatbox.appendChild(div)
+  }
+
+  function RendUserBox(name){
+
+    const user = document.createElement('div')
+    user.classList.add('chatbox__user--busy')
+
+    const nameSlot = document.createElement('p')
+    nameSlot.textContent = name
+
+    const userBox = document.querySelector('.chatbox__user-list')
+
+    user.appendChild(nameSlot)
+    userBox.appendChild(user)
+}
+
+   // route에게 '/chat' 경로로 데이터 전송.
+   document.querySelector("#chat-form").addEventListener('submit', function(e){
+      e.preventDefault();
+      if (e.target.chat.value){
+
+        axios.post('/', {
+          message : this.chat.value
+        })
+        .then(() => {
+          e.target.chat.value = '';
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+      }
+    })
+
+</script>
